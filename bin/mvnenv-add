@@ -13,6 +13,9 @@ name=${path##*/}
 
 if [ -e "${path}" ]; then
   echo "install $path as $name"
+  if [ ! -d "$MVNENV_DIR/versions" ]; then
+    mkdir -p "$MVNENV_DIR/versions"
+  fi
   vername=$MVNENV_DIR/versions/$name
   linkpath=$(resolve_link "$vername")
   if [ -z "${linkpath}" ]; then
