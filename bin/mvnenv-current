@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if [ "${1}" == "--complete" ]; then
+  exit
+fi
+
+WHICHVER=""
+if [ -z "${MVNENV_VERSION}" ]; then
+  if [ -e ".mvn-version" ]; then
+    WHICHVER="local"
+    CURVER=`cat .mvn-version`
+  else
+    WHICHVER="global"
+    CURVER=`cat ${MVNENV_DIR}/version`
+  fi
+else
+  WHICHVER="shell"
+  CURVER=${MVNENV_VERSION}
+fi
+
+WHICHOPT=""
+CUROPT=""
+if [ -z "${MAVEN_OPTS}" ]; then
+  if [ -e ".mvn-option" ]; then
+    WHICHOPT="local"
+    CUROPT=`cat .mvn-option`
+  else
+    WHICHOPT="global"
+    CUROPT=`cat ${MVNENV_DIR}/option`
+  fi
+else
+  WHICHOPT="shell"
+  CUROPT=${MAVEN_OPTS}
+fi
+
+echo "Using ${WHICHVER} version ${CURVER}"
+echo "Using ${WHICHOPT} option ${CUROPT}"

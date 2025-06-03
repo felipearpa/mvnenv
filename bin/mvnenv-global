@@ -1,0 +1,44 @@
+#!/bin/bash
+
+resolve_link() {
+  $(type -p greadlink readlink | head -1) "$1"
+}
+
+if [ "${1}" == "--complete" ]; then
+  echo --unset
+  echo options
+  exec mvnenv versions
+fi
+
+name=${1##*/}
+
+if [ -z "${name}" ]; then
+  if [ -e "${MVNENV_DIR}/version" ]; then
+    echo -e "Current global mvn version\n"
+    cat ${MVNENV_DIR}/version
+
+    echo -e "\nAvailable:\n"
+
+    mvnenv versions
+  else
+    echo -e "There is no global mvn version set\n"
+
+    echo -e "\nAvailable:\n"
+
+    mvnenv versions
+
+    exit 1
+  fi
+elif [ "${name}" == "--unset" ]; then
+  rm $MVNENV_DIR/version
+else
+  vername=$MVNENV_DIR/versions/$name
+  linkpath=$(resolve_link "$vername")
+
+  if [ -z "${linkpath}" ]; then
+    echo "mvn version ${name} do not exists"
+    exit 1
+  else
+    echo ${name} > $MVNENV_DIR/version
+  fi
+fi

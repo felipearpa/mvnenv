@@ -1,0 +1,47 @@
+#!/bin/bash
+
+resolve_link() {
+  $(type -p greadlink readlink | head -1) "${1}"
+}
+
+if [ "${1}" == "--complete" ]; then
+  exit
+fi
+
+if [ -z "${MVNENV_VERSION}" ]; then
+  if git rev-parse --is-inside-work-tree &>/dev/null; then
+    ROOT_DIR=$(git rev-parse --show-toplevel)
+  else
+    ROOT_DIR="."
+  fi
+  if [ -e "${ROOT_DIR}/.mvn-version" ]; then
+    CURVER=`cat "${ROOT_DIR}/.mvn-version"`
+  else
+    CURVER=`cat ${MVNENV_DIR}/version`
+  fi
+else
+  CURVER=${MVNENV_VERSION}
+fi
+
+CUROPT=""
+if [ -z "${MAVEN_OPTS}" ]; then
+  if [ -e "${ROOT_DIR}/.mvn-option" ]; then
+    CUROPT=`cat "${ROOT_DIR}/.mvn-option"`
+  else
+    CUROPT=`cat ${MVNENV_DIR}/option`
+  fi
+fi
+
+name=${MVNENV_DIR}/versions/${CURVER}
+
+path=$(resolve_link "${name}")
+
+program="${1##*/}"
+
+shift 1
+
+export M2_HOME=${path}
+if [ -n "${CUROPT}" ]; then
+  export MAVEN_OPTS="${CUROPT}"
+fi
+exec "${path}/bin/${program}" "${@}"

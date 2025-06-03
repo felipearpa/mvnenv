@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ "${1}" == "--complete" ]; then
+  exit
+fi
+
+for path in "${MVNENV_DIR}/versions/"*; do
+  if [ -d "$path" ]; then
+    echo "${path##*/}"
+  fi
+done
+

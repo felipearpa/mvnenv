@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ "${1}" == "--complete" ]; then
+  exit
+fi
+
+shell="$(basename "$SHELL")"
+if [ -n "${MVNENV_DIR}" ]; then
+  completion_file=${MVNENV_DIR}/completion/mvnenv.${shell}
+  if [ -e "${completion_file}" ]; then
+    echo "source \"${completion_file}\""
+  fi
+fi
+
+cat <<EOF
+mvnenv()
+{
+  command="\$1"
+  if [ "\$#" -gt 0 ]; then
+    shift
+  fi  
+  result=\`command mvnenv "\$command" "\$@"\`
+  exitvalue=\$?
+  if [ -n "\${result}" ]; then
+    if [[ "\${result}" == export* ]] || [[ "\${result}" == unset* ]]; then
+      eval "\${result}"
+    else
+      echo "\$result"
+    fi
+  fi
+  return \$exitvalue
+}
+EOF
