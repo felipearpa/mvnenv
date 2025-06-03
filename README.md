@@ -4,75 +4,70 @@ It allows you to easily switch between multiple Maven versions.
 
 After you install mvnenv, running the "mvn" command will execute a script from mvnenv's bin directory. This script checks your configuration, automatically sets `M2_HOME` to the selected Maven installation, sets `MAVEN_OPTS` to your desired options, and then runs the actual Maven command.
 
-
 ## Installation
 
-1. Check out mvnenv into `~/.mvnenv`.
+1. **Clone mvnenv into your home directory:**
 
-```bash
-git clone https://github.com/themnd/mvnenv.git ~/.mvnenv
-```
+   ```bash
+   git clone https://github.com/themnd/mvnenv.git ~/.mvnenv
+   ```
 
-2. Add `~/.mvnenv/bin` to your `$PATH`.
+2. **Add mvnenv to your `$PATH`:**
 
-```bash
-echo 'export PATH="~/.mvnenv/bin:$PATH"' >> ~/.zprofile
-```
-    
-**Note:** If you use [jenv](http://www.jenv.be), ensure that the command from step 2 appears *before* `eval "$(jenv init -)"` in your shell configuration.
+   ```bash
+   echo 'export PATH="$HOME/.mvnenv/bin:$PATH"' >> ~/.zprofile
+   ```
 
-**Note:** If the Maven `bin` directory is in your `$PATH`, it must be listed *after* mvnenv. You can also remove Maven's `bin` from your `$PATH` entirely, since `mvn`, `mvnDebug`, and `mvnyip` are automatically handled by mvnenv.
+   - **If you use [jenv](http://www.jenv.be):**  
+     Make sure this line appears *before* `eval "$(jenv init -)"` in your shell configuration.
+   - **If Maven’s `bin` directory is in your `$PATH`:**  
+     It must be listed *after* mvnenv, or you can remove it entirely.  
+     `mvn`, `mvnDebug`, and `mvnyip` are automatically handled by mvnenv.
 
+3. **Initialize mvnenv in your shell:**
 
-3. Add `mvnenv init` to your shell.
+   ```bash
+   echo 'eval "$(mvnenv init)"' >> ~/.zprofile
+   ```
 
-```bash
-$ echo 'eval "$(mvnenv init)"' >> ~/.zprofile
-```
-    
-4. Start a new shell.
+4. **Reload your shell configuration:**
 
-```bash
-source ~/.zprofile
-```
+   ```bash
+   source ~/.zprofile
+   ```
 
-5. Verify that mvnenv works.
- 
-```bash
-mvnenv --version
-```
+5. **Verify mvnenv installation:**
 
-6. Add the needed maven versions.
+   ```bash
+   mvnenv --version
+   ```
 
-```bash
-$ mvnenv add /path/to/maven
-```
+6. **Add your required Maven versions:**
 
-7. Configure which maven version to use.
+   ```bash
+   mvnenv add /path/to/maven
+   ```
 
-- Globally
-  
-```bash
-$ mvnenv global maven
-```
-    
-- In the current directory
-    
-```bash
-$ mvnenv local maven2
-```
-    
-- In the current shell
-    
-```bash
-$ mvnenv shell maven2
-```
+7. **Select which Maven version to use:**
 
-8. Verify that works.
+   - **Globally:**
+     ```bash
+     mvnenv global <version>
+     ```
+   - **For the current directory:**
+     ```bash
+     mvnenv local <version>
+     ```
+   - **For the current shell session:**
+     ```bash
+     mvnenv shell <version>
+     ```
 
-```bash
-$ mvn -version
-```
+8. **Verify Maven is set up correctly:**
+
+   ```bash
+   mvn -version
+   ```
 
 ## Commands Available
 
