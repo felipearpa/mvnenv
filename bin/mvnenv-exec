@@ -16,8 +16,11 @@ if [ -z "${MVNENV_VERSION}" ]; then
   fi
   if [ -e "${ROOT_DIR}/.mvn-version" ]; then
     CURVER=`cat "${ROOT_DIR}/.mvn-version"`
-  else
+  elif [ -e "${MVNENV_DIR}/version" ]; then
     CURVER=`cat ${MVNENV_DIR}/version`
+  else
+    echo "No Maven version configured. Use 'mvnenv local' to set a local version or 'mvnenv global' to set a global version." >&2
+    exit 1
   fi
 else
   CURVER=${MVNENV_VERSION}
@@ -27,7 +30,7 @@ CUROPT=""
 if [ -z "${MAVEN_OPTS}" ]; then
   if [ -e "${ROOT_DIR}/.mvn-option" ]; then
     CUROPT=`cat "${ROOT_DIR}/.mvn-option"`
-  else
+  elif [ -e "${MVNENV_DIR}/option" ]; then
     CUROPT=`cat ${MVNENV_DIR}/option`
   fi
 fi
