@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$MVNENV_ROOT" ]; then
-  echo "mvnenv-add: MVNENV_ROOT is not set" >&2
+  echo "Error: MVNENV_ROOT is not set. Please run this command through 'mvnenv' or export the variable manually." >&2
   exit 1
 fi
 
@@ -17,23 +17,23 @@ path=${1}
 name=${path##*/}
 
 if [ -e "${path}" ]; then
-  echo "install $path as $name"
+  echo "Installing Maven version from path '$path' as '$name'..."
   if [ ! -d "$MVNENV_ROOT/versions" ]; then
     mkdir -p "$MVNENV_ROOT/versions"
   fi
   vername="$MVNENV_ROOT/versions/$name"
   linkpath=$(resolve_link "$vername")
   if [ -z "${linkpath}" ]; then
-    echo "do install "
+    echo "Linking '$MVNPATH' to '$vername'..."
     cd ${path} 2>/dev/null
     MVNPATH=${PWD}
     cd ${OLDPATH} 2>/dev/null
     ln -s "${MVNPATH}" "${vername}"
   else
-  	echo "already installed"
+  	echo "Version '$name' is already installed."
   	exit 1
   fi
 else
-  echo "not exists"
+  echo "Error: The path '$path' does not exist." >&2
   exit 1
 fi
