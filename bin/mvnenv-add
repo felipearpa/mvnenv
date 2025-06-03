@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$MVNENV_ROOT" ]; then
+  echo "mvnenv-add: MVNENV_ROOT is not set" >&2
+  exit 1
+fi
+
 resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
 }
@@ -13,10 +18,10 @@ name=${path##*/}
 
 if [ -e "${path}" ]; then
   echo "install $path as $name"
-  if [ ! -d "$MVNENV_DIR/versions" ]; then
-    mkdir -p "$MVNENV_DIR/versions"
+  if [ ! -d "$MVNENV_ROOT/versions" ]; then
+    mkdir -p "$MVNENV_ROOT/versions"
   fi
-  vername=$MVNENV_DIR/versions/$name
+  vername="$MVNENV_ROOT/versions/$name"
   linkpath=$(resolve_link "$vername")
   if [ -z "${linkpath}" ]; then
     echo "do install "

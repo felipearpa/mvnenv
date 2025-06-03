@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$MVNENV_ROOT" ]; then
+  echo "mvnenv-global-options: MVNENV_ROOT is not set" >&2
+  exit 1
+fi
+
 if [ "${1}" == "--complete" ]; then
   echo --unset
   echo --set
@@ -11,14 +16,14 @@ function setValue()
   value=$@
 
   echo "setting option: [${value}]"
-  echo ${value} > $MVNENV_DIR/option
+  echo ${value} > "$MVNENV_ROOT/option"
 }
 
 function unsetValue()
 {
-  if [ -e "${MVNENV_DIR}/option" ]; then
-    options=$(cat ${MVNENV_DIR}/option)
-    rm "${MVNENV_DIR}/option"
+  if [ -e "${MVNENV_ROOT}/option" ]; then
+    options=$(cat ${MVNENV_ROOT}/option)
+    rm "${MVNENV_ROOT}/option"
     echo -e "Removed global mvn option: ${options}"
   else
     echo -e "There is no global mvn option set\n"
@@ -28,8 +33,8 @@ function unsetValue()
 
 function showCurrent()
 {
-  if [ -e "${MVNENV_DIR}/option" ]; then
-    options=$(cat ${MVNENV_DIR}/option)
+  if [ -e "${MVNENV_ROOT}/option" ]; then
+    options=$(cat ${MVNENV_ROOT}/option)
     echo -e "Current global mvn option: ${options}"
   else
     echo -e "There is no global mvn option set\n"

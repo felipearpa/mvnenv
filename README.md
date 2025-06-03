@@ -6,11 +6,17 @@ After you install mvnenv, running the "mvn" command will execute a script from m
 
 ## Installation
 
-1. **Clone mvnenv into your home directory:**
+1. **Install mvnenv (choose one method):**
 
-   ```bash
-   git clone https://github.com/themnd/mvnenv.git ~/.mvnenv
-   ```
+   - **Clone from GitHub:**
+     ```bash
+     git clone https://github.com/themnd/mvnenv.git ~/.mvnenv
+     ```
+
+   - **Or install via Homebrew:**
+     ```bash
+     brew install felipearpa/mvnenv/mvnenv
+     ```
 
 2. **Add mvnenv to your `$PATH`:**
 

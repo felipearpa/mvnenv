@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$MVNENV_ROOT" ]; then
+  echo "mvnenv-remove: MVNENV_ROOT is not set" >&2
+  exit 1
+fi
+
 resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
 }
@@ -10,7 +15,7 @@ fi
 
 name=${1##*/}
 
-vername=$MVNENV_DIR/versions/$name
+vername="$MVNENV_ROOT/versions/$name"
 linkpath=$(resolve_link "$vername")
 
 if [ -z "${linkpath}" ]; then

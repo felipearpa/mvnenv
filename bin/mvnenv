@@ -1,34 +1,39 @@
 #!/bin/bash
 
 if [ -z "${MVNENV_DIR}" ]; then
-  bindir=`dirname ${0}`
-  cd $bindir/.. 2>/dev/null
+  bindir=$(dirname "$0")
+  cd "$bindir/.." 2>/dev/null
   MVNENV_DIR="$(pwd)"
   cd "$OLDPWD"
 fi
 export MVNENV_DIR
 
+if [ -z "$MVNENV_ROOT" ]; then
+  MVNENV_ROOT="$HOME/.mvnenv"
+fi
+export MVNENV_ROOT
+
 command="$1"
 subcommand="$2"
-case "$command" in
-"" | "-h" | "--help" )
-  echo -e "$(mvnenv --version)\n$(mvnenv-help)" >&2
-  ;;
-* )
-  sub_command_path="$(command -v "mvnenv-$command-$subcommand" || true)"
-  if [ -z "$sub_command_path" ]; then
-    command_path="$(command -v "mvnenv-$command" || true)"
-    if [ -z "$command_path" ]; then
-      echo "mvnenv: no such command \`$command'" >&2
-      exit 1
-    fi
-  else
-    command_path=$sub_command_path
-    shift 1
-  fi
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [[ -z "$command" || "$command" == "-h" || "$command" == "--help" ]]; then
+  echo -e "$("$script_dir/mvnenv-version")\n$("$script_dir/mvnenv-help")" >&2
+  exit 0
+fi
+
+# Try mvnenv-command-subcommand
+if [[ -n "$subcommand" && -x "$script_dir/mvnenv-$command-$subcommand" ]]; then
+  shift 2
+  exec "$script_dir/mvnenv-$command-$subcommand" "$@"
+fi
+
+# Try mvnenv-command
+if [[ -x "$script_dir/mvnenv-$command" ]]; then
   shift 1
-  exec "$command_path" "$@"
-  ;;
-esac
+  exec "$script_dir/mvnenv-$command" "$@"
+fi
 
+echo "mvnenv: no such command \`$command'" >&2
+exit 1

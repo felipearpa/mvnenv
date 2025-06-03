@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$MVNENV_ROOT" ]; then
+  echo "mvnenv-global: MVNENV_ROOT is not set" >&2
+  exit 1
+fi
+
 resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
 }
@@ -13,9 +18,9 @@ fi
 name=${1##*/}
 
 if [ -z "${name}" ]; then
-  if [ -e "${MVNENV_DIR}/version" ]; then
+  if [ -e "${MVNENV_ROOT}/version" ]; then
     echo -e "Current global mvn version\n"
-    cat ${MVNENV_DIR}/version
+    cat ${MVNENV_ROOT}/version
 
     echo -e "\nAvailable:\n"
 
@@ -30,15 +35,15 @@ if [ -z "${name}" ]; then
     exit 1
   fi
 elif [ "${name}" == "--unset" ]; then
-  rm $MVNENV_DIR/version
+  rm $MVNENV_ROOT/version
 else
-  vername=$MVNENV_DIR/versions/$name
+  vername=$MVNENV_ROOT/versions/$name
   linkpath=$(resolve_link "$vername")
 
   if [ -z "${linkpath}" ]; then
     echo "mvn version ${name} do not exists"
     exit 1
   else
-    echo ${name} > $MVNENV_DIR/version
+    echo ${name} > $MVNENV_ROOT/version
   fi
 fi
