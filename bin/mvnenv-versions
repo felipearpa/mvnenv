@@ -1,10 +1,15 @@
 #!/bin/bash
 
+if [ -z "$MVNENV_ROOT" ]; then
+  echo "Error: MVNENV_ROOT is not set. Please run this command through 'mvnenv' or export the variable manually." >&2
+  exit 1
+fi
+
 if [ "${1}" == "--complete" ]; then
   exit
 fi
 
-for path in "${MVNENV_DIR}/versions/"*; do
+for path in "${MVNENV_ROOT}/versions/"*; do
   if [ -d "$path" ]; then
     echo "${path##*/}"
   fi

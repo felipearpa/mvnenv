@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$MVNENV_ROOT" ]; then
+  echo "Error: MVNENV_ROOT is not set. Please run this command through 'mvnenv' or export the variable manually." >&2
+  exit 1
+fi
+
 resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
 }
@@ -35,7 +40,7 @@ if [ "${name}" = "--unset" ]; then
   exit 1
 fi
 
-vername=${MVNENV_DIR}/versions/$name
+vername=${MVNENV_ROOT}/versions/$name
 linkpath=$(resolve_link "$vername")
 
 if [ -z "${linkpath}" ]; then
