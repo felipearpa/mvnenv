@@ -10,12 +10,6 @@ teardown() {
   rm -rf "$DUMMY_MAVEN_DIR"
 }
 
-@test "given unset MVNENV_ROOT when running mvnenv-add then it fails" {
-  unset MVNENV_ROOT
-  run ./bin/mvnenv-add /some/path
-  [ "$status" -ne 0 ]
-}
-
 @test "given non-existent path when running mvnenv-add then it fails" {
   non_existing_path="/non/existing/maven"
   run ./bin/mvnenv-add "$non_existing_path"

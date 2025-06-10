@@ -2,8 +2,6 @@
 
 setup() {
   export MVNENV_ROOT="$(mktemp -d)"
-  export PATH="$MVNENV_ROOT:$PATH"
-
   export MVNENV_DIR="$(mktemp -d)"
 }
 

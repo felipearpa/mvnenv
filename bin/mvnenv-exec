@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$MVNENV_ROOT" ]; then
+  echo "Error: MVNENV_ROOT is not set. Please run this command through 'mvnenv' or export the variable manually." >&2
+  exit 1
+fi
+
 resolve_link() {
   $(type -p greadlink readlink | head -1) "${1}"
 }
@@ -14,6 +19,7 @@ if [ -z "${MVNENV_VERSION}" ]; then
   else
     ROOT_DIR="."
   fi
+
   if [ -e "${ROOT_DIR}/.mvn-version" ]; then
     CURVER=`cat "${ROOT_DIR}/.mvn-version"`
   elif [ -e "${MVNENV_DIR}/version" ]; then
@@ -35,7 +41,7 @@ if [ -z "${MAVEN_OPTS}" ]; then
   fi
 fi
 
-name=${MVNENV_DIR}/versions/${CURVER}
+name=${MVNENV_ROOT}/versions/${CURVER}
 
 path=$(resolve_link "${name}")
 
