@@ -56,8 +56,8 @@ teardown() {
 
 @test "given installed Maven version when running mvnenv-local then it sets the local version" {
   local version_name="apache-maven-3.9.6"
-  mkdir -p "$MVNENV_DIR/versions"
-  ln -s /some/path/to/maven "$MVNENV_DIR/versions/$version_name"
+  mkdir -p "$MVNENV_ROOT/versions"
+  ln -s /some/path/to/maven "$MVNENV_ROOT/versions/$version_name"
 
   run ./bin/mvnenv-local "$version_name"
 
@@ -65,16 +65,16 @@ teardown() {
   [ -f .mvn-version ]
   [ "$(cat .mvn-version)" = "$version_name" ]
 
-  rm -f "$MVNENV_DIR/versions/$version_name"
+  rm -f "$MVNENV_ROOT/versions/$version_name"
   rm .mvn-version
 }
 
 @test "given local version exists when setting new version then it is overwritten" {
-  mkdir -p "$MVNENV_DIR/versions"
+  mkdir -p "$MVNENV_ROOT/versions"
   echo "old-version" > .mvn-version
 
-  ln -s /some/path "$MVNENV_DIR/versions/old-version"
-  ln -s /some/other/path "$MVNENV_DIR/versions/new-version"
+  ln -s /some/path "$MVNENV_ROOT/versions/old-version"
+  ln -s /some/other/path "$MVNENV_ROOT/versions/new-version"
 
   run ./bin/mvnenv-local new-version
 
@@ -82,6 +82,6 @@ teardown() {
   [ "$(cat .mvn-version)" = "new-version" ]
 
   rm .mvn-version
-  rm -f "$MVNENV_DIR/versions/old-version"
-  rm -f "$MVNENV_DIR/versions/new-version"
+  rm -f "$MVNENV_ROOT/versions/old-version"
+  rm -f "$MVNENV_ROOT/versions/new-version"
 }
